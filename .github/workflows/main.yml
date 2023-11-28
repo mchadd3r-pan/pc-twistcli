@@ -33,7 +33,7 @@ jobs:
       - name: Deduplicate SARIF
         uses: ./.github/actions/deduplicate-sarif
         with:
-          sarif-file: pcc_scan_results.sarif.json
+          sarif-file: ${{ steps.scan.outputs.sarif_file }}
       
           # (Optional) for compatibility with GitHub's code scanning alerts
       - name: Upload SARIF file
