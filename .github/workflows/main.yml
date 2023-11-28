@@ -31,6 +31,7 @@ jobs:
           image_name: ${{ env.IMAGE_NAME }}
 
       - name: Deduplicate SARIF
+        if: ${{ always() }} # necessary if using failure thresholds in the image scan
         uses: ./.github/workflows/deduplicate-sarif
         with:
           sarif-file: ${{ steps.scan.outputs.sarif_file }}
