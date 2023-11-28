@@ -34,7 +34,7 @@ jobs:
         if: ${{ always() }} # necessary if using failure thresholds in the image scan
         uses: ./.github/workflows/deduplicate-sarif
         with:
-          sarif-file: ${{ steps.scan.outputs.sarif_file }}
+          sarif-file: pcc_scan_results.sarif.json
       
           # (Optional) for compatibility with GitHub's code scanning alerts
       - name: Upload SARIF file
