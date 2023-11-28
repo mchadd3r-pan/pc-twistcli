@@ -30,12 +30,20 @@ jobs:
           pcc_pass: ${{ secrets.PCC_PASS }}
           image_name: ${{ env.IMAGE_NAME }}
 
-      - name: Deduplicate SARIF
-        if: ${{ always() }} # necessary if using failure thresholds in the image scan
-        uses: ./.github/workflows/deduplicate-sarif
-        with:
-          sarif-file: pcc_scan_results.sarif.json
+      # - name: Deduplicate SARIF
+      #   if: ${{ always() }} # necessary if using failure thresholds in the image scan
+      #   uses: ./.github/workflows/deduplicate-sarif
+      #   with:
+      #     sarif-file: ${{ steps.scan.outputs.sarif_file }}
       
+      - name: Deduplicate SARIF
+        if: ${{ always() }}
+        run: |
+            INPUT_SARIF_FILE="${{ steps.scan.outputs.sarif_file }}"
+            jq -s 'map({results} | unique | {results})' "$INPUT_SARIF_FILE" > deduplicated-sarif.sarif
+            mv deduplicated-sarif.sarif "$INPUT_SARIF_FILE"
+        working-directory: ${{ github.workspace }}
+
           # (Optional) for compatibility with GitHub's code scanning alerts
       - name: Upload SARIF file
         if: ${{ always() }} # necessary if using failure thresholds in the image scan
