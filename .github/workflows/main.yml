@@ -31,7 +31,7 @@ jobs:
           image_name: ${{ env.IMAGE_NAME }}
 
       - name: Deduplicate SARIF
-        uses: /.github/workflows/deduplicate-sarif
+        uses: ./.github/workflows/deduplicate-sarif
         with:
           sarif-file: ${{ steps.scan.outputs.sarif_file }}
       
