@@ -8,4 +8,4 @@ inputs:
 runs:
   using: 'docker'
   image:
-    name: 'Dockerfile'
+    name: 'mchadd3rpan/jq:latest'
