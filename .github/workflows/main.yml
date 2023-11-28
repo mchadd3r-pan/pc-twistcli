@@ -40,7 +40,7 @@ jobs:
         if: ${{ always() }}
         run: |
             INPUT_SARIF_FILE="${{ steps.scan.outputs.sarif_file }}"
-            jq -s 'map({results} | unique | {results})' "$INPUT_SARIF_FILE" > deduplicated-sarif.sarif
+            jq '. + {results: [.results[] | {hash: .hash, locations: .locations, message: .message}] | unique_by(.hash)}' "$INPUT_SARIF_FILE" > deduplicated-sarif.sarif
             mv deduplicated-sarif.sarif "$INPUT_SARIF_FILE"
         working-directory: ${{ github.workspace }}
 
