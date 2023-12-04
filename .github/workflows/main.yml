@@ -24,26 +24,26 @@ jobs:
       - name: Build the image
         run: docker build -t $IMAGE_NAME .
 
-      - name: Download twistcli
-        run: |
-          curl -k -u "$PCC_USER":"$PCC_PASS" --output ./twistcli "$PCC_CONSOLE_URL"/api/v1/util/twistcli
+      # - name: Download twistcli
+      #   run: |
+      #     curl -k -u "$PCC_USER":"$PCC_PASS" --output ./twistcli "$PCC_CONSOLE_URL"/api/v1/util/twistcli
       
-      - name: Change permissions
-        run: |
-          chmod +x ./twistcli
+      # - name: Change permissions
+      #   run: |
+      #     chmod +x ./twistcli
       
-      - name: Scan with twistcli
-        run: |
-          ./twistcli images scan "$IMAGE_NAME" --user "$PCC_USER" --password "$PCC_PASS" --address "$PCC_CONSOLE_URL" --details --output-file "pcc_scan_results.sarif.json"
+      # - name: Scan with twistcli
+      #   run: |
+      #     ./twistcli images scan "$IMAGE_NAME" --user "$PCC_USER" --password "$PCC_PASS" --address "$PCC_CONSOLE_URL" --details --output-file "pcc_scan_results.sarif.json"
 
-      # - name: Prisma Cloud image scan
-      #   id: scan
-      #   uses: PaloAltoNetworks/prisma-cloud-scan@v1.5
-      #   with:
-      #     pcc_console_url: ${{ secrets.PCC_CONSOLE_URL }}
-      #     pcc_user: ${{ secrets.PCC_USER }}
-      #     pcc_pass: ${{ secrets.PCC_PASS }}
-      #     image_name: ${{ env.IMAGE_NAME }}
+      - name: Prisma Cloud image scan
+        id: scan
+        uses: PaloAltoNetworks/prisma-cloud-scan@v1.5
+        with:
+          pcc_console_url: ${{ secrets.PCC_CONSOLE_URL }}
+          pcc_user: ${{ secrets.PCC_USER }}
+          pcc_pass: ${{ secrets.PCC_PASS }}
+          image_name: ${{ env.IMAGE_NAME }}
 
           # (Optional) for compatibility with GitHub's code scanning alerts
       - name: Upload SARIF file
