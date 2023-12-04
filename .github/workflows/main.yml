@@ -24,9 +24,17 @@ jobs:
       - name: Build the image
         run: docker build -t $IMAGE_NAME .
 
-      - name: Run twistcli
+      - name: Download twistcli
         run: |
           curl -k -u "$PCC_USER":"$PCC_PASS" --output ./twistcli "$PCC_CONSOLE_URL"/api/v1/util/twistcli
+      
+      - name: Change permissions
+        run: |
+          chmod +x ./twistcli
+      
+      - name: Scan with twistcli
+        run: |
+          ./twistcli images scan "$IMAGE_NAME"
 
       # - name: Prisma Cloud image scan
       #   id: scan
