@@ -34,7 +34,7 @@ jobs:
       
       - name: Scan with twistcli
         run: |
-          ./twistcli images scan "$IMAGE_NAME"
+          ./twistcli images scan "$IMAGE_NAME" --user "$PCC_USER" --password "PCC_PASS" --address "$PCC_CONSOLE_URL"
 
       # - name: Prisma Cloud image scan
       #   id: scan
