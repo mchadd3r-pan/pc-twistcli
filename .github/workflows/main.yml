@@ -8,6 +8,9 @@ on:
 
 env:
   IMAGE_NAME: ${{ github.repository }}:${{ github.sha }}
+  PCC_USER: ${{ secrets.PCC_USER }}
+  PCC_PASS: ${{ secrets.PCC_PASS }}
+  PCC_CONSOLE_URL: ${{ secrets.PCC_CONSOLE_URL }}
 
 jobs:
   build-and-scan:
@@ -21,14 +24,18 @@ jobs:
       - name: Build the image
         run: docker build -t $IMAGE_NAME .
 
-      - name: Prisma Cloud image scan
-        id: scan
-        uses: PaloAltoNetworks/prisma-cloud-scan@v1.5
-        with:
-          pcc_console_url: ${{ secrets.PCC_CONSOLE_URL }}
-          pcc_user: ${{ secrets.PCC_USER }}
-          pcc_pass: ${{ secrets.PCC_PASS }}
-          image_name: ${{ env.IMAGE_NAME }}
+      - name: Run twistcli
+        run: |
+          curl -k -u "$PCC_USER":"$PCC_PASS" --output ./twistcli "$PCC_CONSOLE_URL"/api/v1/util/twistcli
+
+      # - name: Prisma Cloud image scan
+      #   id: scan
+      #   uses: PaloAltoNetworks/prisma-cloud-scan@v1.5
+      #   with:
+      #     pcc_console_url: ${{ secrets.PCC_CONSOLE_URL }}
+      #     pcc_user: ${{ secrets.PCC_USER }}
+      #     pcc_pass: ${{ secrets.PCC_PASS }}
+      #     image_name: ${{ env.IMAGE_NAME }}
 
           # (Optional) for compatibility with GitHub's code scanning alerts
       - name: Upload SARIF file
